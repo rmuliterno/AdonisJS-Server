@@ -2,6 +2,7 @@
 
 const crypto = require('crypto')
 const User = use('App/Models/User')
+const Mail = use('Mail')
 
 class ForgotPasswordController {
   async store ({ request, response }) {
@@ -13,8 +14,28 @@ class ForgotPasswordController {
       user.token_created_at = new Date()
 
       await user.save()
+
+      return response.send({ token: user.token })
+
+    //   await Mail.send(
+    //     ['emails.forgot_password'],
+    //     { email, token: user.token },
+    //     message => {
+    //       message
+    //         .to(user.email)
+    //         .from('gonode@gonode.com', 'Renan | GoNode')
+    //         .subject('Recuperação de senha')
+    //     })
     } catch (err) {
       return response.status(err.status).send({ error: { message: 'Algo não deu certo, e-mail não existente' } })
+    }
+  }
+
+  async update ({ request, response }) {
+    try {
+
+    } catch (err) {
+      return response.status(err.status).send({ error: { message: 'Algo não deu certo ao resetar sua senha' } })
     }
   }
 }
